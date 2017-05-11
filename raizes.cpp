@@ -55,7 +55,7 @@ void falsaPosicao(double a, double b, double err) {
 	printf("iteracoes: %d \n", i);
 }
 
-void newton(double x, double err) {
+void newton(double x, double err, bool log = false) {
 	double xk = 0;
 	int i = 0;
 	while (std::abs(f(x)) > err && i < maxIteracoes) {
@@ -65,7 +65,8 @@ void newton(double x, double err) {
 		}
 		xk = x - (f(x)/f1(x));
 		i++;
-		printf("x: %f xk: %f f(xk): %f\n", x, xk, f(xk));
+		if (log)
+			printf("x: %f xk: %f f(xk): %f f1(xk): %f\n", x, xk, f(xk), f1(xk));
 		x = xk;
 	}
 	printf("xk: %f \n", xk);
@@ -73,8 +74,20 @@ void newton(double x, double err) {
 	printf("iteracoes: %d\n", i);
 }
 
-void secante() {
-	
+void secante(double x0, double x, double err, bool log = false) {
+	double xk = 0;
+	int i = 0;
+	while (std::abs(f(x)) > err && i < maxIteracoes) {
+		xk = x - ( f(x)*(x-x0)/(f(x)-f(x0)) );
+		i++;
+		if (log)
+			printf("x0: %f x: %f xk: %f f(xk): %f\n", x0, x, xk, f(xk));
+		x0 = x;
+		x = xk;
+	}
+	printf("xk: %f \n", xk);
+	printf("f(xk): %f \n", f(xk));
+	printf("iteracoes: %d\n", i);
 }
 
 int main() {
@@ -86,6 +99,8 @@ int main() {
 	printf("\n");
 	printf("Newton:\n");
 	newton(1, 1.0e-6);
+	printf("\nSecante:\n");
+	secante(1, 2, 1.0e-6, true);
 
 	return 0;
 }
